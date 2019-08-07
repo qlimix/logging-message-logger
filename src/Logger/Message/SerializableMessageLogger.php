@@ -26,21 +26,18 @@ final class SerializableMessageLogger implements MessageLoggerInterface
      */
     public function start(SerializableInterface $message): void
     {
-        try {
-            $context = [
-                'type' => 'start',
-                'object' => get_class($message),
-                'message' => $message->serialize(),
-            ];
+        $context = [
+            'type' => 'start',
+            'object' => get_class($message),
+            'message' => $message->serialize(),
+        ];
 
-            $this->logHandler->log(
-                new Channel(self::CHANNEL),
-                Level::createInfo(),
-                'Triggered message '.$message->getName(),
-                $context
-            );
-        } catch (Throwable $exception) {
-        }
+        $this->logHandler->log(
+            new Channel(self::CHANNEL),
+            Level::createInfo(),
+            'Triggered message '.$message->getName(),
+            $context
+        );
     }
 
     /**
@@ -48,47 +45,49 @@ final class SerializableMessageLogger implements MessageLoggerInterface
      */
     public function success(SerializableInterface $message): void
     {
-        try {
-            $context = [
-                'type' => 'success',
-                'object' => get_class($message),
-                'message' => $message->serialize(),
-            ];
+        $context = [
+            'type' => 'success',
+            'object' => get_class($message),
+            'message' => $message->serialize(),
+        ];
 
-            $this->logHandler->log(
-                new Channel(self::CHANNEL),
-                Level::createInfo(),
-                'Successfully processed message '.$message->getName(),
-                $context
-            );
-        } catch (Throwable $exception) {
-        }
+        $this->logHandler->log(
+            new Channel(self::CHANNEL),
+            Level::createInfo(),
+            'Successfully processed message '.$message->getName(),
+            $context
+        );
     }
 
     /**
      * @inheritDoc
+     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
     public function failed(SerializableInterface $message, Throwable $exception): void
     {
-        try {
-            $context = [
-                'type' => 'failed',
-                'object' => get_class($message),
-                'message' => $message->serialize(),
-            ];
+        $context = [
+            'type' => 'failed',
+            'object' => get_class($message),
+            'message' => $message->serialize(),
+            'exception' => [
+                'message' => $exception->getMessage(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+                'trace' => (string) $exception,
+            ],
+        ];
 
-            $this->logHandler->log(
-                new Channel(self::CHANNEL),
-                Level::createError(),
-                'Failed message '.$message->getName(),
-                $context
-            );
-        } catch (Throwable $exception) {
-        }
+        $this->logHandler->log(
+            new Channel(self::CHANNEL),
+            Level::createError(),
+            'Failed message '.$message->getName(),
+            $context
+        );
     }
 
     /**
      * @inheritDoc
+     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
     public function critical(SerializableInterface $message, Throwable $exception): void
     {
