@@ -61,7 +61,6 @@ final class SerializableMessageLogger implements MessageLoggerInterface
 
     /**
      * @inheritDoc
-     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
     public function failed(SerializableInterface $message, Throwable $exception): void
     {
@@ -87,24 +86,26 @@ final class SerializableMessageLogger implements MessageLoggerInterface
 
     /**
      * @inheritDoc
-     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
     public function critical(SerializableInterface $message, Throwable $exception): void
     {
-        try {
-            $context = [
-                'type' => 'critical',
-                'object' => get_class($message),
-                'message' => $message->serialize(),
-            ];
+        $context = [
+            'type' => 'critical',
+            'object' => get_class($message),
+            'message' => $message->serialize(),
+            'exception' => [
+                'message' => $exception->getMessage(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+                'trace' => (string) $exception,
+            ],
+        ];
 
-            $this->logHandler->log(
-                new Channel(self::CHANNEL),
-                Level::createCritical(),
-                'Critically failed message '.$message->getName(),
-                $context
-            );
-        } catch (Throwable $exception) {
-        }
+        $this->logHandler->log(
+            new Channel(self::CHANNEL),
+            Level::createCritical(),
+            'Critically failed message '.$message->getName(),
+            $context
+        );
     }
 }
