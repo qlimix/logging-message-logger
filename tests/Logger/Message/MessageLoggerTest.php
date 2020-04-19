@@ -11,11 +11,9 @@ use Qlimix\Serializable\SerializableInterface;
 
 final class MessageLoggerTest extends TestCase
 {
-    /** @var MockObject */
-    private $logHandler;
+    private MockObject $logHandler;
 
-    /** @var SerializableMessageLogger */
-    private $loggerMiddleware;
+    private SerializableMessageLogger $loggerMiddleware;
 
     protected function setUp(): void
     {
@@ -23,10 +21,7 @@ final class MessageLoggerTest extends TestCase
         $this->loggerMiddleware = new SerializableMessageLogger($this->logHandler);
     }
 
-    /**
-     * @test
-     */
-    public function shouldLogStart(): void
+    public function testShouldLogStart(): void
     {
         $this->logHandler->expects($this->once())
             ->method('log');
@@ -40,10 +35,7 @@ final class MessageLoggerTest extends TestCase
         $this->loggerMiddleware->start($message);
     }
 
-    /**
-     * @test
-     */
-    public function shouldLogSuccess(): void
+    public function testShouldLogSuccess(): void
     {
         $this->logHandler->expects($this->once())
             ->method('log');
@@ -57,10 +49,7 @@ final class MessageLoggerTest extends TestCase
         $this->loggerMiddleware->success($message);
     }
 
-    /**
-     * @test
-     */
-    public function shouldLogFailed(): void
+    public function testShouldLogFailed(): void
     {
         $this->logHandler->expects($this->once())
             ->method('log');
@@ -74,10 +63,7 @@ final class MessageLoggerTest extends TestCase
         $this->loggerMiddleware->failed($message, new Exception());
     }
 
-    /**
-     * @test
-     */
-    public function shouldLogCritical(): void
+    public function testShouldLogCritical(): void
     {
         $this->logHandler->expects($this->once())
             ->method('log');
