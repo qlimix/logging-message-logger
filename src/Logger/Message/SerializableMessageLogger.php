@@ -13,8 +13,7 @@ final class SerializableMessageLogger implements MessageLoggerInterface
 {
     private const CHANNEL = 'messagebus';
 
-    /** @var LogHandlerInterface */
-    private $logHandler;
+    private LogHandlerInterface $logHandler;
 
     public function __construct(LogHandlerInterface $logHandler)
     {
